@@ -255,6 +255,7 @@ sub ProcessButton_Click {
         $process_label->Text('Processing... Done.');
         $result_label->Text("Config file updated and sorted.");
     } else {
+        $process_label->Text('Processing... Done');
         $result_label->Text("No changes were made. All PNG files are already listed.");
     }
 }
