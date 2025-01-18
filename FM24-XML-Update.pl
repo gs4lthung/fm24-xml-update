@@ -13,6 +13,7 @@ my $main_window = Win32::GUI::Window->new(
     -text   => 'FM 2024 Facepack XML Updater',
     -width  => 500,
     -height => 400,
+    -background => [114, 41, 181],
 );
 
 # Add a button to process the XML
@@ -23,6 +24,37 @@ my $process_button = $main_window->AddButton(
     -top  => 20,
     -width => 200,
     -height => 40,
+    -background => [89, 29, 143],
+);
+
+# Add a label to display the directory path
+my $directory_label = $main_window->AddLabel(
+    -name => 'DirectoryLabel',
+    -text => "Directory: $directory",
+    -left => 20,
+    -top  => 80,
+    -width => 450,
+    -background => [114, 41, 181],
+);
+
+# Add a label to display the config file path
+my $config_label = $main_window->AddLabel(
+    -name => 'ConfigLabel',
+    -text => "Config File: $config_file",
+    -left => 20,
+    -top  => 100,
+    -width => 450,
+    -background => [114, 41, 181],
+);
+
+# Add a label to watch the process
+my $process_label = $main_window->AddLabel(
+    -name => 'ProcessLabel',
+    -text => 'Ready to process files.',
+    -left => 20,
+    -top  => 120,
+    -width => 450,
+    -background => [114, 41, 181],
 );
 
 # Add a label to display results
@@ -30,8 +62,9 @@ my $result_label = $main_window->AddLabel(
     -name => 'ResultLabel',
     -text => 'Result: ',
     -left => 20,
-    -top  => 80,
+    -top  => 140,
     -width => 450,
+    -background => [254, 170, 43],
 );
 
 # Event loop
@@ -85,6 +118,7 @@ sub ProcessButton_Click {
             $list_node->appendChild($new_record);
 
             $modified = 1;
+            $process_label->Text("Processing... $file_base.png");
             print "Added record for $file_base\n";
         }
     }
