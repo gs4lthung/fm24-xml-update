@@ -1,5 +1,7 @@
 # FM 2024 Facepack XML Updater
 
+![FM24](https://cdn.oneesports.id/cdn-data/sites/2/2023/10/UkwBa8adRC2fEfdcD9ewZj-450x236.jpg)
+
 ## Overview
 This script automatically adds player IDs to the `config.xml` file in Football Manager 2024. It scans a specified directory for player face images and updates the XML configuration file to include any missing player IDs.
 
