@@ -11,21 +11,81 @@ my $config_file = 'D:\\Game\\Football Manager 2024\\graphics\\faces\\faces\\conf
 my $main_window = Win32::GUI::Window->new(
     -name   => 'MainWindow',
     -text   => 'FM 2024 Facepack XML Updater',
-    -width  => 500,
-    -height => 400,
-    -background => [114, 41, 181],
+    -width  => 600,
+    -height => 450,
+    -background => [73, 29, 112],
+    -onTerminate => sub { return -1; },
+    -font => Win32::GUI::Font->new(
+        -name => 'Segoe UI',
+        -size => 10,
+        -bold => 1,
+    ),
 );
+
+# Center the window on the screen
+my $screen_width  = Win32::GUI::GetSystemMetrics(0);
+my $screen_height = Win32::GUI::GetSystemMetrics(1);
+my $window_width  = 600;
+my $window_height = 450;
+my $x_pos = int(($screen_width - $window_width) / 2);
+my $y_pos = int(($screen_height - $window_height) / 2);
+$main_window->Move($x_pos, $y_pos);
+
 
 # Add a button to process the XML
 my $process_button = $main_window->AddButton(
     -name => 'ProcessButton',
-    -text => 'Process Files',
-    -left => 150,
+    -text => 'Update config.xml',
+    -left => 200,
     -top  => 20,
     -width => 200,
     -height => 40,
     -background => [89, 29, 143],
+    -foreground => [255, 255, 255],
+    -font => Win32::GUI::Font->new(
+        -name => 'Segoe UI',
+        -size => 10,
+        -bold => 1,
+    ),
 );
+
+# Add a button to select the directory
+my $directory_button = $main_window->AddButton(
+    -name => 'DirectoryButton',
+    -text => '...',
+    -left => 550,
+    -top  => 80,
+    -width => 20 ,
+    -height => 20,
+    -background => [89, 29, 143],
+    -foreground => [255, 255, 255],
+    -font => Win32::GUI::Font->new(
+        -name => 'Segoe UI',
+        -size => 10,
+        -bold => 1,
+    ),
+    -onClick => \&SelectDirectory,
+    
+);
+
+# Add a button to select the config file
+my $config_button = $main_window->AddButton(
+    -name => 'ConfigButton',
+    -text => '...',
+    -left => 550,
+    -top  => 110,
+    -width => 20,
+    -height => 20,
+    -background => [89, 29, 143],
+    -foreground => [255, 255, 255],
+    -font => Win32::GUI::Font->new(
+        -name => 'Segoe UI',
+        -size => 10,
+        -bold => 1,
+    ),
+    -onClick => \&SelectConfigFile,
+);
+
 
 # Add a label to display the directory path
 my $directory_label = $main_window->AddLabel(
@@ -33,8 +93,9 @@ my $directory_label = $main_window->AddLabel(
     -text => "Directory: $directory",
     -left => 20,
     -top  => 80,
-    -width => 450,
-    -background => [114, 41, 181],
+    -width => 500,
+    -background => [116, 39, 181],
+    -foreground => [0, 0, 0],
 );
 
 # Add a label to display the config file path
@@ -42,9 +103,10 @@ my $config_label = $main_window->AddLabel(
     -name => 'ConfigLabel',
     -text => "Config File: $config_file",
     -left => 20,
-    -top  => 100,
-    -width => 450,
-    -background => [114, 41, 181],
+    -top  => 110,
+    -width => 500,
+    -background => [116, 39, 181],
+    -foreground => [0, 0, 0],
 );
 
 # Add a label to watch the process
@@ -52,9 +114,10 @@ my $process_label = $main_window->AddLabel(
     -name => 'ProcessLabel',
     -text => 'Ready to process files.',
     -left => 20,
-    -top  => 120,
-    -width => 450,
-    -background => [114, 41, 181],
+    -top  => 140,
+    -width => 550,
+    -background => [116, 39, 181],
+    -foreground => [0, 0, 0],
 );
 
 # Add a label to display results
@@ -62,17 +125,43 @@ my $result_label = $main_window->AddLabel(
     -name => 'ResultLabel',
     -text => 'Result: ',
     -left => 20,
-    -top  => 140,
-    -width => 450,
-    -background => [254, 170, 43],
+    -top  => 170,
+    -width => 550,
+    -background => [246, 156, 43],
+    -foreground => [0, 0, 0],
 );
 
 # Event loop
 $main_window->Show();
 Win32::GUI::Dialog();
 
+# Callback for selecting the directory
+sub SelectDirectory {
+    $directory = Win32::GUI::BrowseForFolder(
+        -title => "Select Directory",
+        -folder => $directory || "C:\\",
+    );
+    if ($directory) {
+        $directory_label->Text("Directory: $directory");
+    }
+}
+
+# Callback for selecting the config file
+sub SelectConfigFile {
+    $config_file = Win32::GUI::GetOpenFileName(
+        -title => "Select Config File",
+        -filter => ['XML Files' => '*.xml', 'All Files' => '*.*'],
+        -directory => $directory || "C:\\",
+    );
+    if ($config_file) {
+        $config_label->Text("Config File: $config_file");
+    }
+}
+
+
 # Callback for the button click
 sub ProcessButton_Click {
+    $process_label->Text('Processing... Please wait.');
     # Parse the existing config.xml file
     my $parser = XML::LibXML->new();
     my $doc;
@@ -163,6 +252,7 @@ sub ProcessButton_Click {
         open my $fh, '>:encoding(UTF-8)', $config_file or die "Cannot open $config_file for writing: $!";
         print $fh $doc->toString(1); # Pretty print with indentation
         close $fh;
+        $process_label->Text('Processing... Done.');
         $result_label->Text("Config file updated and sorted.");
     } else {
         $result_label->Text("No changes were made. All PNG files are already listed.");

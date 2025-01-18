@@ -4,4 +4,6 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-ProcessButton_Click	script.pl	75;"	s
+SelectDirectory	FM24-XML-Update.pl	139;"	s
+SelectConfigFile	FM24-XML-Update.pl	150;"	s
+ProcessButton_Click	FM24-XML-Update.pl	163;"	s
