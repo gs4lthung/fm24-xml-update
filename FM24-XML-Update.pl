@@ -32,6 +32,14 @@ my $y_pos = int(($screen_height - $window_height) / 2);
 $main_window->Move($x_pos, $y_pos);
 
 
+# Load the custom icon
+my $icon = Win32::GUI::Icon->new('icon.ico');
+if ($icon) {
+    $main_window->SetIcon($icon);
+} else {
+    warn "Failed to load icon: $!";
+}
+
 # Add a button to process the XML
 my $process_button = $main_window->AddButton(
     -name => 'ProcessButton',
