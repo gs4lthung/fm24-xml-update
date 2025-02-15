@@ -197,7 +197,7 @@ sub ProcessButton_Click {
     my $modified = 0;
 
     foreach my $file (@png_files) {
-        my ($file_base) = $file =~ /^(\d+)\.png$/; # Extract file number (e.g., 20020446456 from 20020446456.png)
+        my ($file_base) = $file =~ /^(r-\d+|\d+)\.png$/;
         next unless defined $file_base;           # Skip files that don't match the pattern
 
         if (!exists $existing_records{$file_base}) {
